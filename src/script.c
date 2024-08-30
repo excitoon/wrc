@@ -45,7 +45,7 @@ static const struct luaL_Reg threadlib[] = {
     { NULL,         NULL                   }
 };
 
-lua_State *script_create(char *file, char *url, char *method, char **headers) {
+lua_State *script_create(char *file, char *url, char *method, char *data, char **headers) {
     lua_State *L = luaL_newstate();
     luaL_openlibs(L);
     (void) luaL_dostring(L, "wrk = require \"wrk\"");
@@ -79,6 +79,8 @@ lua_State *script_create(char *file, char *url, char *method, char **headers) {
     set_field(L, 4, "port",   push_url_part(L, url, &parts, UF_PORT));
     lua_pushstring(L, method);
     set_field(L, 4, "method", 0);
+    lua_pushstring(L, data);
+    set_field(L, 4, "body", 0);
     set_fields(L, 4, fields);
 
     lua_getfield(L, 4, "headers");
